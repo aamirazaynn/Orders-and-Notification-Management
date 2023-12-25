@@ -1,16 +1,23 @@
 package com.example.order_management.entities;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 
-public class Category extends CategoryComponent {
+public class Category{
+    @Getter
+    private String name;
+    private ArrayList<ProductItem> categories;
 
-    private ArrayList<CategoryComponent> categories;
-
-    public void addCategory(CategoryComponent c) {
+    public void addProduct(ProductItem c) {
         categories.add(c);
     }
 
-    public void removeCategory(CategoryComponent c) {
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void removeProduct(ProductItem c) {
         categories.remove(c);
     }
 
@@ -18,8 +25,7 @@ public class Category extends CategoryComponent {
         return categories.size();
     }
 
-    @Override
-    public CategoryComponent print() {
+    public Category print() {
         return this;
     }
 }

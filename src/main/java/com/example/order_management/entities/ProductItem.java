@@ -1,6 +1,6 @@
 package com.example.order_management.entities;
 
-public class ProductItem extends CategoryComponent {
+public class ProductItem{
 
     private String serialNumber;
     private String name;
@@ -17,12 +17,10 @@ public class ProductItem extends CategoryComponent {
         this.serialNumber = serialNumber;
     }
 
-    @Override
     public String getName() {
         return name;
     }
 
-    @Override
     public void setName(String name) {
         this.name = name;
     }
@@ -59,8 +57,7 @@ public class ProductItem extends CategoryComponent {
         this.remainingNumber = remainingNumber;
     }
 
-    @Override
-    public CategoryComponent print() {
+    public ProductItem print() {
         return this;
     }
 }
