@@ -1,19 +1,20 @@
 package com.example.order_management.service;
 import com.example.order_management.entities.ProductItem;
-import com.example.order_management.Common;
+import com.example.order_management.repositories.ProductRepo;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
+import java.util.ArrayList;
 
 @Service
 public class ProductService {
 
+    private final ProductRepo ProductRepo = new ProductRepo();
     public Boolean addProduct(ProductItem product) {
         try {
-            if(Common.ListOfProducts.get(product.getSerialNumber()) != null){
+            if(ProductRepo.getProduct(product.getSerialNumber()) != null){
                 return false;
             }
-            Common.ListOfProducts.put(product.getSerialNumber(), product);
+            ProductRepo.addProduct(product);
         } catch (Exception e) {
             System.out.println("Exception in addProduct as" + e.getMessage());
             return false;
@@ -21,16 +22,10 @@ public class ProductService {
         return true;
     }
 
-    public ProductItem[] getAllPersons() {
+    public ArrayList<ProductItem> getAllProducts() {
         try {
-            Set<String> serialNums = Common.ListOfProducts.keySet();
-            ProductItem[] p = new ProductItem[serialNums.size()];
-            int i = 0;
-            for(String serialNum : serialNums){
-                p[i] = Common.ListOfProducts.get(serialNum);
-                i++;
-            }
-            return p;
+            ArrayList<ProductItem> temp = ProductRepo.getAllProducts();
+            return temp;
         } catch (Exception e) {
             System.out.println("Exception in getAllProducts as" + e.getMessage());
         }

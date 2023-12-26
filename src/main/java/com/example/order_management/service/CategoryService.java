@@ -1,28 +1,36 @@
 package com.example.order_management.service;
-
+import com.example.order_management.repositories.ProductRepo;
+import com.example.order_management.repositories.CategoryRepo;
 import com.example.order_management.entities.Category;
-import com.example.order_management.Common;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.Set;
 
 @Service
 public class CategoryService {
 
+    private final CategoryRepo Repo = new CategoryRepo();
+    private final ProductRepo ProductRepo = new ProductRepo();
     public Boolean addNewCategory(Category category) {
         try {
-            if(Common.ListOfCategories.get(category.getName()) != null){
+            if(Repo.getCategory(category.getName()) != null){
                 return false;
             }
-            Common.ListOfCategories.put(category.getName(), category);
+            Repo.addCategory(category);
         } catch (Exception e) {
             System.out.println("Exception in addNewCategory as" + e.getMessage());
             return false;
         }
         return true;
     }
-    public Set<String> getAllCategories() {
+    public ArrayList<String> getAllCategories() {
         try {
-            Set<String> categoryNames = Common.ListOfCategories.keySet();
+            ArrayList<String> categoryNames = new ArrayList<>();
+            ArrayList<Category> temp = Repo.getAllCategories();
+            for (Category category : temp) {
+                categoryNames.add(category.getName());
+            }
             return categoryNames;
         } catch (Exception e) {
             System.out.println("Exception in getAllCategories as" + e.getMessage());
@@ -31,10 +39,10 @@ public class CategoryService {
     }
     public Category getCategoryByName(String name) {
         try {
-            if(Common.ListOfCategories.get(name) == null){
+            if(Repo.getCategory(name) == null){
                 return null;
             }
-            Category temp = Common.ListOfCategories.get(name);
+            Category temp = Repo.getCategory(name);
             return temp;
         } catch (Exception e) {
             System.out.println("Exception in addNewCategory as" + e.getMessage());
@@ -43,10 +51,10 @@ public class CategoryService {
     }
     public Boolean deleteCategoryByName(String name) {
         try {
-            if(Common.ListOfCategories.get(name) == null){
+            if(Repo.getCategory(name) == null){
                 return false;
             }
-            Common.ListOfCategories.remove(name);
+           Repo.removeCategory(name);
         } catch (Exception e) {
             System.out.println("Exception in deleteCategoryByName as" + e.getMessage());
             return false;
@@ -55,17 +63,17 @@ public class CategoryService {
     }
     public Boolean addItemToCategory(String serialNumber, String name) {
         try {
-            if(Common.ListOfProducts.get(serialNumber) == null){
+            if(ProductRepo.getProduct(serialNumber) == null){
                 System.out.println("Product doesn't exist: " + serialNumber);
                 System.out.println("Category doesn't exist: " + name);
                 return false;
             }
-            if(Common.ListOfCategories.get(name) == null){
+            if(Repo.getCategory(name) == null){
                 System.out.println("Category doesn't exist: " + name);
                 return false;
             }
 
-            Common.ListOfCategories.get(name).addProduct(Common.ListOfProducts.get(serialNumber));
+            Repo.getCategory(name).addProduct(ProductRepo.getProduct(serialNumber));
         } catch (Exception e) {
             System.out.println("Exception in addItemToCategory as" + e.getMessage());
             return false;
@@ -74,13 +82,13 @@ public class CategoryService {
     }
     public Boolean deleteItemFromCategory(String serialNumber, String name) {
         try {
-            if(Common.ListOfProducts.get(serialNumber) == null){
+            if(ProductRepo.getProduct(serialNumber) == null){
                 return false;
             }
-            if(Common.ListOfCategories.get(name) == null){
+            if(Repo.getCategory(name) == null){
                 return false;
             }
-            Common.ListOfCategories.get(name).removeProduct(Common.ListOfProducts.get(serialNumber));
+            Repo.getCategory(name).removeProduct(ProductRepo.getProduct(serialNumber));
         } catch (Exception e) {
             System.out.println("Exception in deleteItemFromCategory as" + e.getMessage());
             return false;

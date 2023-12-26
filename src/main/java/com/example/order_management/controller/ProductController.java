@@ -5,6 +5,8 @@ import com.example.order_management.entities.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 @RestController
 @RequestMapping("/product")
 public class ProductController {
@@ -31,7 +33,7 @@ public class ProductController {
     }
 
     @GetMapping("/getAllProducts")
-    public ProductItem[] getAllProducts() {
-        return productService.getAllPersons();
+    public ArrayList<ProductItem> getAllProducts() {
+        return productService.getAllProducts();
     }
 }

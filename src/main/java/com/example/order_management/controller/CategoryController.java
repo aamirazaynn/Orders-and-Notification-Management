@@ -3,9 +3,11 @@ package com.example.order_management.controller;
 import com.example.order_management.entities.Category;
 import com.example.order_management.entities.Response;
 import com.example.order_management.service.CategoryService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 @RestController
@@ -33,7 +35,7 @@ public class CategoryController {
         return response;
     }
     @GetMapping("/getAllCategories")
-    public Set<String> getAllCategories() {
+    public ArrayList<String> getAllCategories() {
         return categoryService.getAllCategories();
     }
     @GetMapping("/getCategory/{categoryName}")
