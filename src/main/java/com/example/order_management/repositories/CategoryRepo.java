@@ -1,15 +1,17 @@
 package com.example.order_management.repositories;
+
 import com.example.order_management.entities.Category;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 
-
 @Repository
+@Component
 public class CategoryRepo {
     private final ArrayList<Category> Categories;
 
-    public CategoryRepo() {
-        Categories = new ArrayList<Category>();
+    public CategoryRepo(ArrayList<Category> categories) {
+        Categories = categories;
     }
 
     public void addCategory(Category category){
@@ -30,17 +32,32 @@ public class CategoryRepo {
     }
 
     public void removeCategory(String name){
-        for(Category category : Categories){
-            if(category.getName().equals(name)){
-                Categories.remove(category);
-            }
-        }
+        Categories.removeIf(category -> category.getName().equals(name));
     }
 
-    public void updateCategory(Category category){
+    public Boolean addProductToCategory(String name, ProductRepo productRepo, String serialNumber){
         for(Category c : Categories){
-            if(c.getName().equals(category.getName())){
-                c.setName(category.getName());
+            if(c.getName().equals(name)){
+                if(productRepo.getProduct(serialNumber) != null){
+                    c.addProduct(productRepo.getProduct(serialNumber));
+                    return true;
+                } else {
+                    System.out.println("Product doesn't exist: " + serialNumber);
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void removeProductFromCategory(String name, ProductRepo productRepo, String serialNumber){
+        for(Category c : Categories){
+            if(c.getName().equals(name)){
+                if(productRepo.getProduct(serialNumber) != null){
+                    c.removeProduct(productRepo.getProduct(serialNumber));
+                } else {
+                    System.out.println("Product doesn't exist: " + serialNumber);
+                }
             }
         }
     }

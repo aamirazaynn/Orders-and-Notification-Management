@@ -1,23 +1,23 @@
-package com.example.order_management.controller;
+package com.example.order_management.controllers;
 
 import com.example.order_management.entities.Category;
 import com.example.order_management.entities.Response;
-import com.example.order_management.service.CategoryService;
-import lombok.AllArgsConstructor;
+import com.example.order_management.repositories.ProductRepo;
+import com.example.order_management.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/category")
 public class CategoryController {
-    @Autowired
     CategoryService categoryService;
+    ProductRepo productRepo;
 
-    public CategoryController(CategoryService categoryService) {
+    public CategoryController(CategoryService categoryService, ProductRepo productRepo) {
         this.categoryService = categoryService;
+        this.productRepo = productRepo;
     }
 
     @PostMapping("/addCategory")
@@ -59,7 +59,7 @@ public class CategoryController {
     @PostMapping("/addItemToCategory/{categoryName}")
     public Response addItemToCategory(@RequestBody String serialNumber, @PathVariable("categoryName") String name) {
         String temp = serialNumber.substring(1, serialNumber.length() - 1);
-        boolean res = categoryService.addItemToCategory(temp, name);
+        boolean res = categoryService.addItemToCategory(temp, name, productRepo);
         Response response = new Response();
         if (!res) {
             response.setStatus(false);
@@ -73,7 +73,7 @@ public class CategoryController {
     }
     @DeleteMapping("/deleteItemFromCategory/{categoryName}")
     public Response deleteItemFromCategory(@RequestBody String serialNumber, @PathVariable("categoryName") String name) {
-        boolean res = categoryService.deleteItemFromCategory(serialNumber, name);
+        boolean res = categoryService.deleteItemFromCategory(serialNumber, name, productRepo);
         Response response = new Response();
         if (!res) {
             response.setStatus(false);

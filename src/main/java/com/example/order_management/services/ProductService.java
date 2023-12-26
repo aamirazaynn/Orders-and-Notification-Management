@@ -1,4 +1,5 @@
-package com.example.order_management.service;
+package com.example.order_management.services;
+
 import com.example.order_management.entities.ProductItem;
 import com.example.order_management.repositories.ProductRepo;
 import org.springframework.stereotype.Service;
@@ -7,8 +8,10 @@ import java.util.ArrayList;
 
 @Service
 public class ProductService {
-
-    private final ProductRepo ProductRepo = new ProductRepo();
+    private final ProductRepo ProductRepo;
+    public ProductService(ProductRepo ProductRepo) {
+        this.ProductRepo = ProductRepo;
+    }
     public Boolean addProduct(ProductItem product) {
         try {
             if(ProductRepo.getProduct(product.getSerialNumber()) != null){
@@ -19,13 +22,13 @@ public class ProductService {
             System.out.println("Exception in addProduct as" + e.getMessage());
             return false;
         }
+        ProductRepo.printProducts();
         return true;
     }
 
     public ArrayList<ProductItem> getAllProducts() {
         try {
-            ArrayList<ProductItem> temp = ProductRepo.getAllProducts();
-            return temp;
+            return ProductRepo.getAllProducts();
         } catch (Exception e) {
             System.out.println("Exception in getAllProducts as" + e.getMessage());
         }

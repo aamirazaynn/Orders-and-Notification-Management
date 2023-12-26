@@ -1,16 +1,14 @@
-package com.example.order_management.controller;
-import com.example.order_management.entities.ProductItem;
-import com.example.order_management.service.ProductService;
-import com.example.order_management.entities.Response;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+package com.example.order_management.controllers;
 
+import com.example.order_management.entities.ProductItem;
+import com.example.order_management.services.ProductService;
+import com.example.order_management.entities.Response;
+import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/product")
 public class ProductController {
-    @Autowired
     ProductService productService;
 
     public ProductController(ProductService productService) {

@@ -1,18 +1,22 @@
 package com.example.order_management.repositories;
+
 import com.example.order_management.entities.ProductItem;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 
 @Repository
+@Component
 public class ProductRepo {
     private final ArrayList<ProductItem> Products;
 
-    public ProductRepo() {
-        Products = new ArrayList<ProductItem>();
+    public ProductRepo(ArrayList<ProductItem> products) {
+        Products = products;
     }
 
     public void addProduct(ProductItem product){
         Products.add(product);
+        System.out.println(this.Products);
     }
 
     public ProductItem getProduct(String serialNumber){
@@ -29,11 +33,7 @@ public class ProductRepo {
     }
 
     public void removeProduct(String serialNumber){
-        for(ProductItem product : Products){
-            if(product.getSerialNumber().equals(serialNumber)){
-                Products.remove(product);
-            }
-        }
+        Products.removeIf(product -> product.getSerialNumber().equals(serialNumber));
     }
 
     public void updateProduct(ProductItem product){
@@ -45,6 +45,13 @@ public class ProductRepo {
                 p.setRemainingNumber(product.getRemainingNumber());
                 p.setVendor(product.getVendor());
             }
+        }
+    }
+
+    public void printProducts(){
+        for(ProductItem product : Products){
+            System.out.println(product.getSerialNumber());
+            System.out.println(product.getName());
         }
     }
 }

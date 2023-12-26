@@ -1,28 +1,21 @@
 package com.example.order_management.entities;
 
 import lombok.Getter;
-
+import lombok.Setter;
 import java.util.ArrayList;
 
+@Getter
+@Setter
 public class Category{
-    @Getter
     private String name;
-    private ArrayList<ProductItem> categories;
+    private ArrayList<ProductItem> category;
 
     public void addProduct(ProductItem c) {
-        categories.add(c);
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        category.add(c);
     }
 
     public void removeProduct(ProductItem c) {
-        categories.remove(c);
-    }
-
-    public int getRemaining() {
-        return categories.size();
+        category.remove(c);
     }
 
     public Category print() {
