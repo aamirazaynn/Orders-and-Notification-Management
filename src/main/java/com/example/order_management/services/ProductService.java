@@ -15,6 +15,7 @@ public class ProductService {
     public Boolean addProduct(ProductItem product) {
         try {
             if(ProductRepo.getProduct(product.getSerialNumber()) != null){
+                System.out.println("Product already exists: " + product.getSerialNumber());
                 return false;
             }
             ProductRepo.addProduct(product);

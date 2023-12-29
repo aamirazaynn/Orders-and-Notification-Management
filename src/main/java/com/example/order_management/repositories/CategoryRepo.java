@@ -1,6 +1,8 @@
 package com.example.order_management.repositories;
 
 import com.example.order_management.entities.Category;
+import com.example.order_management.entities.ProductItem;
+import com.example.order_management.services.ProductService;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
@@ -35,16 +37,11 @@ public class CategoryRepo {
         Categories.removeIf(category -> category.getName().equals(name));
     }
 
-    public Boolean addProductToCategory(String name, ProductRepo productRepo, String serialNumber){
+    public Boolean addProductToCategory(String categoryName, ProductItem productItem){
         for(Category c : Categories){
-            if(c.getName().equals(name)){
-                if(productRepo.getProduct(serialNumber) != null){
-                    c.addProduct(productRepo.getProduct(serialNumber));
-                    return true;
-                } else {
-                    System.out.println("Product doesn't exist: " + serialNumber);
-                    return false;
-                }
+            if(c.getName().equals(categoryName)){
+                c.addProduct(productItem);
+                return true;
             }
         }
         return false;

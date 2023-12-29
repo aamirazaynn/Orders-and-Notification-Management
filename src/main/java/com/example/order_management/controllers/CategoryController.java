@@ -4,7 +4,6 @@ import com.example.order_management.entities.Category;
 import com.example.order_management.entities.Response;
 import com.example.order_management.repositories.ProductRepo;
 import com.example.order_management.services.CategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -13,11 +12,9 @@ import java.util.ArrayList;
 @RequestMapping("/category")
 public class CategoryController {
     CategoryService categoryService;
-    ProductRepo productRepo;
 
-    public CategoryController(CategoryService categoryService, ProductRepo productRepo) {
+    public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
-        this.productRepo = productRepo;
     }
 
     @PostMapping("/addCategory")
@@ -56,30 +53,15 @@ public class CategoryController {
         response.setMessage("Category deleted successfully");
         return response;
     }
-    @PostMapping("/addItemToCategory/{categoryName}")
-    public Response addItemToCategory(@RequestBody String serialNumber, @PathVariable("categoryName") String name) {
-        String temp = serialNumber.substring(1, serialNumber.length() - 1);
-        boolean res = categoryService.addItemToCategory(temp, name, productRepo);
-        Response response = new Response();
-        if (!res) {
-            response.setStatus(false);
-            response.setMessage("Product or category doesn't exists");
-            return response;
-        }
-
-        response.setStatus(true);
-        response.setMessage("product added to category successfully");
-        return response;
-    }
     @DeleteMapping("/deleteItemFromCategory/{categoryName}")
     public Response deleteItemFromCategory(@RequestBody String serialNumber, @PathVariable("categoryName") String name) {
-        boolean res = categoryService.deleteItemFromCategory(serialNumber, name, productRepo);
+        //boolean res = categoryService.deleteItemFromCategory(serialNumber, name, productRepo);
         Response response = new Response();
-        if (!res) {
+        //if (!res) {
             response.setStatus(false);
             response.setMessage("Product or category Doesn't Exists");
-            return response;
-        }
+            //return response;
+        //}
 
         response.setStatus(true);
         response.setMessage("Product deleted from category successfully");

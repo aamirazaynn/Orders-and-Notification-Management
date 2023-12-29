@@ -1,5 +1,6 @@
 package com.example.order_management.services;
 
+import com.example.order_management.entities.ProductItem;
 import com.example.order_management.repositories.ProductRepo;
 import com.example.order_management.repositories.CategoryRepo;
 import com.example.order_management.entities.Category;
@@ -60,18 +61,13 @@ public class CategoryService {
         }
         return true;
     }
-    public Boolean addItemToCategory(String serialNumber, String name, ProductRepo productRepo) {
+    public Boolean addItemToCategory(ProductItem productItem, String categoryName) {
         try {
-            if(categoryRepo.getCategory(name) == null){
-                System.out.println("Category doesn't exist: " + name);
+            if(categoryRepo.getCategory(categoryName) == null){
+                System.out.println("Category doesn't exist: " + categoryName);
                 return false;
             }
-            System.out.println("out");
-            if(productRepo.getProduct(serialNumber) == null){
-                System.out.println("Product doesn't exist: " + serialNumber);
-                return false;
-            }
-            categoryRepo.addProductToCategory(name, productRepo, serialNumber);
+            categoryRepo.addProductToCategory(categoryName, productItem);
         } catch (Exception e) {
             System.out.println("Exception in addItemToCategory as" + e.getMessage());
             return false;
