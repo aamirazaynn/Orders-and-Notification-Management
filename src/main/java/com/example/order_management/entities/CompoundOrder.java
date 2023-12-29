@@ -29,4 +29,8 @@ public class CompoundOrder extends OrderComponent {
         }
         return super.shippingFees;
     }
+
+    public ArrayList<OrderComponent> getOrderComponents() {
+        return orderComponents;
+    }
 }

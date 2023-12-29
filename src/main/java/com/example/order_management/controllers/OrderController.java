@@ -29,7 +29,6 @@ public class OrderController {
     @PostMapping("/placeSimpleOrder")
     public Response placeOrder(@RequestBody List<String> productList) {
         Response response = new Response();
-        System.out.println("Received productList: " + productList);
         if (authenticationService.isLoggedIn() == false) {
             response.setStatus(false);
             response.setMessage("User not logged in , please login first");
