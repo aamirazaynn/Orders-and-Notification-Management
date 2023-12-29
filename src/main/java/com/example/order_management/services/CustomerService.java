@@ -1,6 +1,5 @@
 package com.example.order_management.services;
 
-import com.example.order_management.entities.Category;
 import com.example.order_management.entities.Customer;
 import com.example.order_management.repositories.CustomerRepo;
 import org.springframework.stereotype.Service;

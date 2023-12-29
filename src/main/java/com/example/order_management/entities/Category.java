@@ -8,14 +8,14 @@ import java.util.ArrayList;
 @Setter
 public class Category{
     private String name;
-    private ArrayList<ProductItem> category;
+    private ArrayList<ProductItem> products;
 
     public void addProduct(ProductItem c) {
-        category.add(c);
+        products.add(c);
     }
 
     public void removeProduct(ProductItem c) {
-        category.remove(c);
+        products.remove(c);
     }
 
     public Category print() {

@@ -6,11 +6,13 @@ import lombok.Setter;
 @Setter
 @Getter
 public abstract class OrderComponent {
-    private float shippingFees;
+    protected float shippingFees;
+    protected String id;
 
     public OrderComponent(float shippingFees) {
         this.shippingFees = shippingFees;
     }
 
     abstract public OrderComponent printOrder();
+    abstract public float calcShipping();
 }

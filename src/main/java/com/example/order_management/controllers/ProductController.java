@@ -29,7 +29,6 @@ public class ProductController {
         response.setMessage("Product created successfully");
         return response;
     }
-
     @GetMapping("/getAllProducts")
     public ArrayList<ProductItem> getAllProducts() {
         return productService.getAllProducts();

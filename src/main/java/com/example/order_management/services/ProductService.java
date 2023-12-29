@@ -22,7 +22,6 @@ public class ProductService {
             System.out.println("Exception in addProduct as" + e.getMessage());
             return false;
         }
-        ProductRepo.printProducts();
         return true;
     }
 
@@ -33,5 +32,17 @@ public class ProductService {
             System.out.println("Exception in getAllProducts as" + e.getMessage());
         }
         return null;
+    }
+
+    public ProductItem getProductBySerialNumber(String serialNumber) {
+        try {
+            if(ProductRepo.getProduct(serialNumber) == null){
+                return null;
+            }
+            return ProductRepo.getProduct(serialNumber);
+        } catch (Exception e) {
+            System.out.println("Exception in getProductBySerialNumber as" + e.getMessage());
+            return null;
+        }
     }
 }

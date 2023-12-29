@@ -11,13 +11,12 @@ import java.util.ArrayList;
 @RequestMapping("/customer")
 public class CustomerController {
     private final CustomerService CustomerService;
-    CustomerService customerService;
 
     public CustomerController(CustomerService customerService) {
         this.CustomerService = customerService;
     }
 
-    @PostMapping("/addCustomer")
+    @PostMapping("/createAccount")
     public Response addCustomer(@RequestBody Customer customer) {
         boolean res = CustomerService.addCustomer(customer);
         Response response = new Response();
@@ -35,7 +34,6 @@ public class CustomerController {
     public Customer getCustomerByUsername(@PathVariable("username") String username) {
         return CustomerService.getCustomerByUsername(username);
     }
-
     @GetMapping("/getAllCustomers")
     public ArrayList<Customer> getAllCustomers() {
         return CustomerService.getAllCustomers();
