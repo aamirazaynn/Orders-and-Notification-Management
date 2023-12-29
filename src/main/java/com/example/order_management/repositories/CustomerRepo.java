@@ -16,7 +16,6 @@ public class CustomerRepo {
 
     public void addCustomer(Customer customer){
         customers.add(customer);
-        System.out.println(this.customers);
     }
 
     public Customer getCustomer(String username){

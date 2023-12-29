@@ -16,6 +16,13 @@ public class AuthenticationController {
     @PostMapping("/login/{username}/{password}")
     public Response login(@PathVariable String username, @PathVariable String password) {
         Response response = new Response();
+
+        if(authenticationService.isLoggedIn()){
+            response.setStatus(false);
+            response.setMessage("There is a user logged in");
+            return response;
+        }
+
         if (authenticationService.login(username, password)) {
             response.setStatus(true);
             response.setMessage("Login successful");
