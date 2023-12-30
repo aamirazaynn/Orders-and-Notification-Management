@@ -1,5 +1,6 @@
 package com.example.order_management.repositories;
 
+import com.example.order_management.entities.CompoundOrder;
 import com.example.order_management.entities.Customer;
 import com.example.order_management.entities.OrderComponent;
 import org.springframework.stereotype.Component;
@@ -37,6 +38,11 @@ public class OrderRepo {
 
     public void shipOrder(String orderID){
         for(OrderComponent order : orders){
+            if (order instanceof CompoundOrder) {
+                for (OrderComponent orderComponent : ((CompoundOrder) order).getOrderComponents()) {
+                    orderComponent.setShipped(true);
+                }
+            }
             if(order.getId().equals(orderID)){
                 order.setShipped(true);
             }
