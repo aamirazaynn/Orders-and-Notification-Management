@@ -52,7 +52,7 @@ public class OrderController {
             productItems.add(productService.getProductBySerialNumber(product));
         }
 
-        SimpleOrder order = new SimpleOrder("1", 70, customer, productItems);
+        SimpleOrder order = new SimpleOrder(orderService.getAllOrders().size() + 1 + "", 70, customer, productItems);
         boolean res = orderService.addOrder(order);
         if(!res){
             response.setStatus(false);

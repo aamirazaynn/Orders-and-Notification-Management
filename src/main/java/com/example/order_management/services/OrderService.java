@@ -15,9 +15,9 @@ public class OrderService {
     }
     public Boolean addOrder(OrderComponent order) {
         try {
-            if(orderRepo.getOrder(order.getId()) != null){
-                return false;
-            }
+//            if(orderRepo.getOrder(order.getId()) != null){
+//                return false;
+//            }
             orderRepo.addOrder(order);
         } catch (Exception e) {
             System.out.println("Exception in addOrder as" + e.getMessage());

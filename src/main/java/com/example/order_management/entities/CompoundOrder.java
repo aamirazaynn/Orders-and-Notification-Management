@@ -3,15 +3,15 @@ package com.example.order_management.entities;
 import java.util.ArrayList;
 
 public class CompoundOrder extends OrderComponent {
-    ArrayList<OrderComponent> orderComponents = new ArrayList<>();
+    ArrayList<SimpleOrder> orderComponents = new ArrayList<>();
 
     public CompoundOrder(float shippingFees) {
         super(shippingFees);
     }
-    public void addOrder(OrderComponent orderComponent) {
+    public void addOrder(SimpleOrder orderComponent) {
         orderComponents.add(orderComponent);
     }
-    public void removeOrder(OrderComponent orderComponent) {
+    public void removeOrder(SimpleOrder orderComponent) {
         orderComponents.remove(orderComponent);
     }
     public OrderComponent getOrder(int index) {
@@ -30,7 +30,7 @@ public class CompoundOrder extends OrderComponent {
         return super.shippingFees;
     }
 
-    public ArrayList<OrderComponent> getOrderComponents() {
+    public ArrayList<SimpleOrder> getOrderComponents() {
         return orderComponents;
     }
 }

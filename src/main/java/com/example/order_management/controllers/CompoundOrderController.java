@@ -44,6 +44,7 @@ public class CompoundOrderController {
         }
 
         CompoundOrder compoundOrder = new CompoundOrder(180);
+        int counter = 1;
         for (CompoundOrderInput compoundOrderInput : compoundOrderInputs) {
             String customerUsername = compoundOrderInput.getUsername();
             List<String> products = compoundOrderInput.getProducts();
@@ -70,9 +71,11 @@ public class CompoundOrderController {
                 productItems.add(productService.getProductBySerialNumber(product));
             }
 
-            SimpleOrder order = new SimpleOrder("1", 70, customer, productItems);
+            SimpleOrder order = new SimpleOrder(counter + "", 70, customer, productItems);
+            counter++;
             compoundOrder.addOrder(order);
         }
+        compoundOrder.setId(orderService.getAllOrders().size() + 1 + "");
         boolean res = orderService.addOrder(compoundOrder);
         if (!res) {
             response.setStatus(false);

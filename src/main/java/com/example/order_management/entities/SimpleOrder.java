@@ -15,7 +15,7 @@ public class SimpleOrder extends OrderComponent {
         super(shippingFees);
         this.customer = customer;
         this.products.addAll(products);
-        this.id = "1";
+        this.id = id;
     }
 
     public void addProduct(ProductItem product){

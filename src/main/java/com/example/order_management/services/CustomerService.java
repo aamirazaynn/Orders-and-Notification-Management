@@ -21,7 +21,6 @@ public class CustomerService {
             System.out.println("Exception in addCustomer as" + e.getMessage());
             return false;
         }
-        CustomerRepo.printCustomers();
         return true;
     }
     public Customer getCustomerByUsername(String username) {
