@@ -47,13 +47,13 @@ public class CategoryRepo {
         return false;
     }
 
-    public void removeProductFromCategory(String name, ProductRepo productRepo, String serialNumber){
+    public void removeProductFromCategory(String name, ProductItem productItem){
         for(Category c : Categories){
             if(c.getName().equals(name)){
-                if(productRepo.getProduct(serialNumber) != null){
-                    c.removeProduct(productRepo.getProduct(serialNumber));
+                if(productItem != null){
+                    c.removeProduct(productItem);
                 } else {
-                    System.out.println("Product doesn't exist: " + serialNumber);
+                    System.out.println("Product doesn't exist: " + productItem);
                 }
             }
         }

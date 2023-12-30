@@ -1,8 +1,8 @@
 package com.example.order_management.controllers;
 
 import com.example.order_management.entities.Category;
+import com.example.order_management.entities.ProductItem;
 import com.example.order_management.entities.Response;
-import com.example.order_management.repositories.ProductRepo;
 import com.example.order_management.services.CategoryService;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +37,18 @@ public class CategoryController {
     }
     @GetMapping("/getCategory/{categoryName}")
     public Category getCategoryByName(@PathVariable("categoryName") String name) {
-        return categoryService.getCategoryByName(name);
+        Category tempCategory = categoryService.getCategoryByName(name);
+
+        ArrayList<ProductItem> tempList = new ArrayList<>();
+        for(ProductItem productItem : tempCategory.getProducts()){
+            if(productItem.getRemainingNumber() > 0){
+                tempList.add(productItem);
+            }
+        }
+
+        tempCategory.setProducts(tempList);
+
+        return tempCategory;
     }
     @DeleteMapping("/deleteCategory/{categoryName}")
     public Response deleteCategoryByName(@PathVariable("categoryName") String name) {
@@ -51,20 +62,6 @@ public class CategoryController {
 
         response.setStatus(true);
         response.setMessage("Category deleted successfully");
-        return response;
-    }
-    @DeleteMapping("/deleteItemFromCategory/{categoryName}")
-    public Response deleteItemFromCategory(@RequestBody String serialNumber, @PathVariable("categoryName") String name) {
-        //boolean res = categoryService.deleteItemFromCategory(serialNumber, name, productRepo);
-        Response response = new Response();
-        //if (!res) {
-            response.setStatus(false);
-            response.setMessage("Product or category Doesn't Exists");
-            //return response;
-        //}
-
-        response.setStatus(true);
-        response.setMessage("Product deleted from category successfully");
         return response;
     }
 }

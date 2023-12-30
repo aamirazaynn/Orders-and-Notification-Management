@@ -74,12 +74,12 @@ public class CategoryService {
         }
         return true;
     }
-    public Boolean deleteItemFromCategory(String serialNumber, String name, ProductRepo ProductRepo) {
+    public Boolean deleteItemFromCategory(String categoryName, ProductItem productItem) {
         try {
-            if(categoryRepo.getCategory(name) == null){
+            if(categoryRepo.getCategory(categoryName) == null){
                 return false;
             }
-            categoryRepo.removeProductFromCategory(name, ProductRepo, serialNumber);
+            categoryRepo.removeProductFromCategory(categoryName, productItem);
         } catch (Exception e) {
             System.out.println("Exception in deleteItemFromCategory as" + e.getMessage());
             return false;

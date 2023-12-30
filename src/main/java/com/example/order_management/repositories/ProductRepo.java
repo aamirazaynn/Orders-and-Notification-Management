@@ -36,14 +36,10 @@ public class ProductRepo {
         Products.removeIf(product -> product.getSerialNumber().equals(serialNumber));
     }
 
-    public void updateProduct(ProductItem product){
+    public void updateProductRemaining(ProductItem product){
         for(ProductItem p : Products){
             if(p.getSerialNumber().equals(product.getSerialNumber())){
-                p.setCategory(product.getCategory());
-                p.setPrice(product.getPrice());
-                p.setName(product.getName());
                 p.setRemainingNumber(product.getRemainingNumber());
-                p.setVendor(product.getVendor());
             }
         }
     }

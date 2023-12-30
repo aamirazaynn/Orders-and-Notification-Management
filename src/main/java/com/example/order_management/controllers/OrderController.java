@@ -1,10 +1,7 @@
 package com.example.order_management.controllers;
 
 import com.example.order_management.entities.*;
-import com.example.order_management.services.AuthenticationService;
-import com.example.order_management.services.CustomerService;
-import com.example.order_management.services.OrderService;
-import com.example.order_management.services.ProductService;
+import com.example.order_management.services.*;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
@@ -14,13 +11,15 @@ public class OrderController {
     private final OrderService orderService;
     private final CustomerService customerService;
     private final ProductService productService;
+    private final CategoryService categoryService;
     private final AuthenticationService authenticationService;
 
-    public OrderController(OrderService orderService, CustomerService customerService, ProductService productService , AuthenticationService authenticationService) {
+    public OrderController(OrderService orderService, CustomerService customerService, ProductService productService , AuthenticationService authenticationService, CategoryService categoryService) {
         this.orderService = orderService;
         this.customerService = customerService;
         this.productService = productService;
         this.authenticationService = authenticationService;
+        this.categoryService = categoryService;
     }
 //    List<String> productList
     @PostMapping("/simpleOrder")
@@ -68,6 +67,14 @@ public class OrderController {
         customer.setBalance(customer.getBalance() - totalPrice);
         customerService.updateCustomerBalance(customer);
 
+        // Update remaining number of products
+        for (ProductItem productItem : productItems) {
+            productItem.setRemainingNumber(productItem.getRemainingNumber() - 1);
+            productService.updateProductRemaining(productItem);
+            categoryService.deleteItemFromCategory(productItem.getCategory(),productItem);
+            categoryService.addItemToCategory(productItem, productItem.getCategory());
+        }
+
         // Add order
         SimpleOrder order = new SimpleOrder(orderService.getAllOrders().size() + 1 + "", 70, customer, productItems);
         boolean res = orderService.addOrder(order);
@@ -97,21 +104,22 @@ public class OrderController {
 
         // loop for every simple order in the compound order
         int counter = 1;
-        ArrayList<Map.Entry<Float, Customer>> customersInCompoundOrder = new ArrayList<>();
+        ArrayList<Map.Entry<Customer, Float>> customersInCompoundOrder = new ArrayList<>();
+        ArrayList<Map.Entry<ProductItem, Integer>> productsInOrder = new ArrayList<>();
         for (CompoundOrderInput compoundOrderInput : compoundOrderInputs) {
             String customerUsername = compoundOrderInput.getUsername();
-            List<String> products = compoundOrderInput.getProducts();
+            List<String> stringSerialNumbers = compoundOrderInput.getProducts();
 
             // check if request is valid
-            if (customerUsername == null || products == null || products.isEmpty()) {
+            if (customerUsername == null || stringSerialNumbers == null || stringSerialNumbers.isEmpty()) {
                 response.setStatus(false);
-                response.setMessage("Invalid request, please provide customer username and products");
+                response.setMessage("Invalid request, please provide Customer username and products");
                 return response;
             }
 
-            // check if customer exists
-            Customer customer = customerService.getCustomerByUsername(customerUsername);
-            if (customer == null) {
+            // check if tempCustomer exists
+            Customer tempCustomer = customerService.getCustomerByUsername(customerUsername);
+            if (tempCustomer == null) {
                 response.setStatus(false);
                 response.setMessage("Customer " + customerUsername + " not found");
                 return response;
@@ -120,35 +128,56 @@ public class OrderController {
             // check if product exists and add it to the list
             ArrayList<ProductItem> productItems = new ArrayList<>();
             float totalPrice= 0.0f;
-            for (String product : products) {
-                if (productService.getProductBySerialNumber(product) == null) {
+            for (String serialNumber : stringSerialNumbers) {
+                ProductItem tempProduct = productService.getProductBySerialNumber(serialNumber);
+
+                // check if the product exist
+                if (tempProduct == null) {
                     response.setStatus(false);
-                    response.setMessage("Product " + product + "not found");
+                    response.setMessage("Product " + serialNumber + "not found");
                     return response;
                 }
-                productItems.add(productService.getProductBySerialNumber(product));
-                totalPrice += productService.getProductBySerialNumber(product).getPrice();
+                // check if the product in stock
+                if(tempProduct.getRemainingNumber() < 1){
+                    response.setStatus(false);
+                    response.setMessage("Product " + serialNumber + " is out of stock");
+                    return response;
+                }
+                productsInOrder.add(new AbstractMap.SimpleEntry<>(tempProduct, 1));
+                totalPrice += tempProduct.getPrice();
+                productItems.add(tempProduct);
             }
 
             // check if balance is enough
-            if(customer.getBalance() < totalPrice){
+            if(tempCustomer.getBalance() < totalPrice){
                 response.setStatus(false);
-                response.setMessage(customer.getUsername() + "'s balance is not enough");
+                response.setMessage(tempCustomer.getUsername() + "'s balance is not enough");
                 return response;
             }
 
-            customersInCompoundOrder.add(new AbstractMap.SimpleEntry<>(totalPrice, customer));
-            SimpleOrder order = new SimpleOrder(counter + "", 70, customer, productItems);
-            compoundOrder.addOrder(order);
+            SimpleOrder simpleOrder = new SimpleOrder(counter + "", 70, tempCustomer, productItems);
+            customersInCompoundOrder.add(new AbstractMap.SimpleEntry<>(tempCustomer, totalPrice));
+
+            compoundOrder.addOrder(simpleOrder);
             counter++;
         }
 
         // for loop to update balance
-        for(Map.Entry<Float, Customer> entry : customersInCompoundOrder) {
-            Float totalPrice = entry.getKey();
-            Customer customer = entry.getValue();
+        for(Map.Entry<Customer, Float> entry : customersInCompoundOrder) {
+            Float totalPrice = entry.getValue();
+            Customer customer = entry.getKey();
             customer.setBalance(customer.getBalance() - totalPrice);
             customerService.updateCustomerBalance(customer);
+        }
+
+        // for loop to update remaining items
+        for(Map.Entry<ProductItem, Integer> entry : productsInOrder){
+            Integer takenNumber = entry.getValue();
+            ProductItem takenProduct = entry.getKey();
+            takenProduct.setRemainingNumber(takenProduct.getRemainingNumber() - takenNumber);
+            productService.updateProductRemaining(takenProduct);
+            categoryService.deleteItemFromCategory(takenProduct.getCategory(), takenProduct);
+            categoryService.addItemToCategory(takenProduct, takenProduct.getCategory());
         }
 
         compoundOrder.setId(orderService.getAllOrders().size() + 1 + "");

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 @Service
 public class ProductService {
     private final ProductRepo ProductRepo;
+
     public ProductService(ProductRepo ProductRepo) {
         this.ProductRepo = ProductRepo;
     }
@@ -25,7 +26,6 @@ public class ProductService {
         }
         return true;
     }
-
     public ArrayList<ProductItem> getAllProducts() {
         try {
             return ProductRepo.getAllProducts();
@@ -34,7 +34,6 @@ public class ProductService {
         }
         return null;
     }
-
     public ProductItem getProductBySerialNumber(String serialNumber) {
         try {
             if(ProductRepo.getProduct(serialNumber) == null){
@@ -46,4 +45,8 @@ public class ProductService {
             return null;
         }
     }
+    public void updateProductRemaining(ProductItem product){
+        ProductRepo.updateProductRemaining(product);
+    }
+
 }
