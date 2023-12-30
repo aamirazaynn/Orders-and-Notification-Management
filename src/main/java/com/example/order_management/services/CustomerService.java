@@ -34,7 +34,6 @@ public class CustomerService {
             return null;
         }
     }
-
     public ArrayList<Customer> getAllCustomers() {
         try {
             return CustomerRepo.getAllCustomers();
@@ -42,5 +41,12 @@ public class CustomerService {
             System.out.println("Exception in getAllCustomers as" + e.getMessage());
         }
         return null;
+    }
+    public void updateCustomerBalance(Customer customer) {
+        try {
+            CustomerRepo.updateCustomerBalance(customer);
+        } catch (Exception e) {
+            System.out.println("Exception in updateCustomerBalance as" + e.getMessage());
+        }
     }
 }

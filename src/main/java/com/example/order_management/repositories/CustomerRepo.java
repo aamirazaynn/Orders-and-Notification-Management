@@ -35,12 +35,9 @@ public class CustomerRepo {
         customers.removeIf(customer -> customer.getUsername().equals(username));
     }
 
-    public void updateCustomer(Customer customer){
+    public void updateCustomerBalance(Customer customer){
         for(Customer customer1 : customers){
             if(customer1.getUsername().equals(customer.getUsername())){
-                customer1.setPassword(customer.getPassword());
-                customer1.setPhoneNumber(customer.getPhoneNumber());
-                customer1.setLocation(customer.getLocation());
                 customer1.setBalance(customer.getBalance());
             }
         }
