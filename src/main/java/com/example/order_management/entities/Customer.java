@@ -11,7 +11,6 @@ public class Customer {
     private String password;
     private String phoneNumber;
     private String location;
+    private String language;
     private float balance;
-
-
 }

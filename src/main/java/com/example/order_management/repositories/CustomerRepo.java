@@ -13,11 +13,9 @@ public class CustomerRepo {
     public CustomerRepo(ArrayList<Customer> customers) {
         this.customers = customers;
     }
-
     public void addCustomer(Customer customer){
         customers.add(customer);
     }
-
     public Customer getCustomer(String username){
         for(Customer customer : customers){
             if(customer.getUsername().equals(username)){
@@ -26,15 +24,12 @@ public class CustomerRepo {
         }
         return null;
     }
-
     public ArrayList<Customer> getAllCustomers(){
         return customers;
     }
-
     public void removeCustomer(String username){
         customers.removeIf(customer -> customer.getUsername().equals(username));
     }
-
     public void updateCustomerBalance(Customer customer){
         for(Customer customer1 : customers){
             if(customer1.getUsername().equals(customer.getUsername())){
@@ -42,7 +37,14 @@ public class CustomerRepo {
             }
         }
     }
-
+    public String getLanguage(String username){
+        for(Customer customer : customers){
+            if(customer.getUsername().equals(username)){
+                return customer.getLanguage();
+            }
+        }
+        return null;
+    }
     public void printCustomers(){
         for(Customer customer : customers){
             System.out.println(customer.getUsername());

@@ -49,4 +49,12 @@ public class CustomerService {
             System.out.println("Exception in updateCustomerBalance as" + e.getMessage());
         }
     }
+    public String getLanguage(String username) {
+        try {
+            return CustomerRepo.getLanguage(username);
+        } catch (Exception e) {
+            System.out.println("Exception in getLanguage as" + e.getMessage());
+        }
+        return null;
+    }
 }
