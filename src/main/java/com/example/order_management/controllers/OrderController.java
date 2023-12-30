@@ -23,7 +23,7 @@ public class OrderController {
     }
 //    List<String> productList
     @PostMapping("/simpleOrder")
-    public Response placeSimpleOrder(@RequestBody List<String> productList) {
+    public Response placeSimpleOrder(@RequestBody List<String> listStringSerialNumbers) {
         Response response = new Response();
         float totalPrice = 0;
 
@@ -46,14 +46,24 @@ public class OrderController {
 
         // Check if product exists and add products to the list
         ArrayList<ProductItem> productItems = new ArrayList<>();
-        for (String product : productList) {
-            if(productService.getProductBySerialNumber(product) == null){
+        for (String stringSerialNumber : listStringSerialNumbers) {
+            ProductItem tempProduct = productService.getProductBySerialNumber(stringSerialNumber);
+
+            // check if the product exists
+            if(tempProduct == null){
                 response.setStatus(false);
-                response.setMessage("Product " + product + "not found");
+                response.setMessage("Product " + stringSerialNumber + "not found");
                 return response;
             }
-            totalPrice += productService.getProductBySerialNumber(product).getPrice();
-            productItems.add(productService.getProductBySerialNumber(product));
+
+            // check if the product in stock
+            if(tempProduct.getRemainingNumber() < 1){
+                response.setStatus(false);
+                response.setMessage("Product " + stringSerialNumber + " is out of stock");
+                return response;
+            }
+            totalPrice += tempProduct.getPrice();
+            productItems.add(tempProduct);
         }
 
         // Check if balance is enough
