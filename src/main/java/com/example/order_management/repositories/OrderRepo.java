@@ -1,9 +1,11 @@
 package com.example.order_management.repositories;
 
+import com.example.order_management.entities.Customer;
 import com.example.order_management.entities.OrderComponent;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 @Component
@@ -32,4 +34,23 @@ public class OrderRepo {
     public void removeOrder(String orderID){
         orders.removeIf(product -> product.getId().equals(orderID));
     }
+
+    public void shipOrder(String orderID){
+        for(OrderComponent order : orders){
+            if(order.getId().equals(orderID)){
+                order.setShipped(true);
+            }
+        }
+    }
+
+    public boolean isShipped(String orderID){
+        for(OrderComponent order : orders){
+            if(order.getId().equals(orderID)){
+                return order.isShipped();
+            }
+        }
+        return false;
+    }
+
+
 }

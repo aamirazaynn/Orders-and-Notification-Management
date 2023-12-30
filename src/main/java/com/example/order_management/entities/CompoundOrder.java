@@ -1,6 +1,7 @@
 package com.example.order_management.entities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CompoundOrder extends OrderComponent {
     ArrayList<SimpleOrder> orderComponents = new ArrayList<>();
@@ -32,5 +33,14 @@ public class CompoundOrder extends OrderComponent {
 
     public ArrayList<SimpleOrder> getOrderComponents() {
         return orderComponents;
+    }
+
+    @Override
+    public List<Customer> getAllCustomers() {
+        List<Customer> customers = new ArrayList<>();
+        for (OrderComponent orderComponent : orderComponents) {
+            customers.addAll(orderComponent.getAllCustomers());
+        }
+        return customers;
     }
 }

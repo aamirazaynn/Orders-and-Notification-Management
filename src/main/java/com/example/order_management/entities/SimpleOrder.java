@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
@@ -36,4 +37,11 @@ public class SimpleOrder extends OrderComponent {
         }
         return super.shippingFees;
     }
+    @Override
+    public List<Customer> getAllCustomers() {
+        List<Customer> customers = new ArrayList<>();
+        customers.add(customer);
+        return customers;
+    }
+
 }
