@@ -29,10 +29,6 @@ public class CompoundOrder extends OrderComponent {
     }
     @Override
     public float calcShipping() {
-        super.shippingFees = 0;
-        for (OrderComponent orderComponent : orderComponents) {
-            super.shippingFees += orderComponent.calcShipping();
-        }
         return super.shippingFees;
     }
     @Override

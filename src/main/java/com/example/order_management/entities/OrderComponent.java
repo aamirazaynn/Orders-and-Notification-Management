@@ -3,6 +3,7 @@ package com.example.order_management.entities;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ public abstract class OrderComponent {
     protected float shippingFees;
     protected String id;
     protected boolean isShipped;
+    protected LocalDateTime shippingTime;
 
     public OrderComponent(float shippingFees) {
         this.shippingFees = shippingFees;

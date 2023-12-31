@@ -3,6 +3,8 @@ package com.example.order_management.controllers;
 import com.example.order_management.entities.*;
 import com.example.order_management.services.*;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 import java.util.*;
 
 @RestController
@@ -64,6 +66,10 @@ public class ShippingController {
             // add notification
             Customer tempCustomer = authenticationService.getLoggedInCustomer();
             notificationService.addNotification(tempCustomer, orderId, "shipping");
+
+            // set time of shipping
+            LocalDateTime now = LocalDateTime.now();
+            order.setShippingTime(now);
 
             response.setStatus(true);
             response.setMessage("Order shipped successfully");

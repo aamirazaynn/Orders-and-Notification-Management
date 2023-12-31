@@ -34,10 +34,6 @@ public class SimpleOrder extends OrderComponent {
     }
     @Override
     public float calcShipping() {
-        super.shippingFees = 0;
-        for (ProductItem product : products) {
-            super.shippingFees += product.getPrice();
-        }
         return super.shippingFees;
     }
     @Override
