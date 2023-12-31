@@ -16,10 +16,8 @@ public class NotificationRepo {
     public void addNotification(Notification notification){
         notifications.add(notification);
     }
-    public Queue<Notification> getAllNotifications(){
+    public LinkedList<Notification> getAllNotifications(){
         return notifications;
     }
-
-
 
 }

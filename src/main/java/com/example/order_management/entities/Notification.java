@@ -18,11 +18,8 @@ public class Notification {
         this.subject = subject;
         this.content = content;
         this.channel = channel;
-
     }
 
-    public Notification() {
-
-    }
+    public Notification() {}
 
 }

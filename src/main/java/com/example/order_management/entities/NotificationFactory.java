@@ -1,7 +1,6 @@
 package com.example.order_management.entities;
 
 public class NotificationFactory {
-
     public Notification createNotification(String language, String subject) {
         Notification notification = new Notification();
         if (language.equals("en")&&subject.equals("shipping")) {
@@ -32,5 +31,7 @@ public class NotificationFactory {
             notification.setChannel("SMS");
         }
         return notification;
+
     }
+
 }
