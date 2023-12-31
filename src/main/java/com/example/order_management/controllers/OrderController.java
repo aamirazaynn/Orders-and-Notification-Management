@@ -203,7 +203,15 @@ public class OrderController {
         return response;
     }
     @GetMapping("/getAllOrders")
-    public ArrayList<OrderComponent> getOrders() {
-        return orderService.getAllOrders();
+    public ArrayList<OrderPrinter> getOrders() {
+        ArrayList<OrderPrinter> orderPrinters = new ArrayList<>();
+        for(OrderComponent order : orderService.getAllOrders()){
+            OrderPrinter temp = new OrderPrinter();
+            temp.setOrderId(order.getId());
+            temp.setShipped(order.isShipped());
+            temp.setOrderDetails(order.getAllProductsForOutput());
+            orderPrinters.add(temp);
+        }
+        return orderPrinters;
     }
 }

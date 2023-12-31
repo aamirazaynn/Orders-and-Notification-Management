@@ -1,8 +1,13 @@
 package com.example.order_management.entities;
 
-import java.util.ArrayList;
-import java.util.List;
+import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Getter
 public class CompoundOrder extends OrderComponent {
     ArrayList<SimpleOrder> orderComponents = new ArrayList<>();
 
@@ -30,11 +35,6 @@ public class CompoundOrder extends OrderComponent {
         }
         return super.shippingFees;
     }
-
-    public ArrayList<SimpleOrder> getOrderComponents() {
-        return orderComponents;
-    }
-
     @Override
     public List<Customer> getAllCustomers() {
         List<Customer> customers = new ArrayList<>();
@@ -42,5 +42,13 @@ public class CompoundOrder extends OrderComponent {
             customers.addAll(orderComponent.getAllCustomers());
         }
         return customers;
+    }
+    @Override
+    public Map<String, ArrayList<ProductItem>> getAllProductsForOutput() {
+        Map<String, ArrayList<ProductItem>> temp = new HashMap<>();
+        for (SimpleOrder orderComponent : orderComponents) {
+            temp.put(orderComponent.getCustomer().getUsername(), orderComponent.getProducts());
+        }
+        return temp;
     }
 }

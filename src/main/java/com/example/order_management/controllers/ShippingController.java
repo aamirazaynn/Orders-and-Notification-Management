@@ -14,14 +14,11 @@ import java.util.*;
 public class ShippingController {
     private final OrderService orderService;
     private final CustomerService customerService;
-    private final ProductService productService;
-    private final AuthenticationService authenticationService;
 
-    public ShippingController(OrderService orderService, CustomerService customerService, ProductService productService , AuthenticationService authenticationService) {
+
+    public ShippingController(OrderService orderService, CustomerService customerService) {
         this.orderService = orderService;
         this.customerService = customerService;
-        this.productService = productService;
-        this.authenticationService = authenticationService;
     }
 
     @PostMapping("")
@@ -48,8 +45,7 @@ public class ShippingController {
                     response.setMessage("Customer " + customer.getUsername() + "'s balance is not enough");
                     return response;
                 }
-                else
-                {
+                else {
                     shippingFeesList.add(shippingFees/order.getAllCustomers().size());
                 }
             }
