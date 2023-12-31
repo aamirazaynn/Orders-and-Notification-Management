@@ -214,4 +214,14 @@ public class OrderController {
         }
         return orderPrinters;
     }
+
+    @GetMapping("/getOrderById")
+    public OrderPrinter getOrderById(@RequestBody String id){
+        OrderComponent order = orderService.getOrder(id);
+        OrderPrinter temp = new OrderPrinter();
+        temp.setOrderId(order.getId());
+        temp.setShipped(order.isShipped());
+        temp.setOrderDetails(order.getAllProductsForOutput());
+        return temp;
+    }
 }
