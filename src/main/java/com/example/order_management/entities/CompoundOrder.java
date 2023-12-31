@@ -51,4 +51,14 @@ public class CompoundOrder extends OrderComponent {
         }
         return temp;
     }
+    @Override
+    public Map<String, Float> calcTotalCost() {
+        Map<String, Float> returnTemp = new HashMap<>();
+        for(SimpleOrder orderComponent : orderComponents){
+            Map<String, Float> temp = orderComponent.calcTotalCost();
+            String username = orderComponent.getCustomer().getUsername();
+            returnTemp.put(username, temp.get(username));
+        }
+        return returnTemp;
+    }
 }

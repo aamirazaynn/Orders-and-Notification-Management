@@ -16,7 +16,6 @@ public class OrderRepo {
     public OrderRepo(ArrayList<OrderComponent> orders) {
         this.orders = orders;
     }
-
     public OrderComponent getOrder(String orderID){
         for(OrderComponent order : orders){
             if(order.getId().equals(orderID)){
@@ -35,7 +34,6 @@ public class OrderRepo {
     public void removeOrder(String orderID){
         orders.removeIf(product -> product.getId().equals(orderID));
     }
-
     public void shipOrder(String orderID){
         for(OrderComponent order : orders){
             if (order instanceof CompoundOrder) {
@@ -48,7 +46,6 @@ public class OrderRepo {
             }
         }
     }
-
     public boolean isShipped(String orderID){
         for(OrderComponent order : orders){
             if(order.getId().equals(orderID)){
@@ -57,6 +54,4 @@ public class OrderRepo {
         }
         return false;
     }
-
-
 }

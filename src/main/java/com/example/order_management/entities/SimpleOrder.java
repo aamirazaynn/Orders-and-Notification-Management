@@ -52,5 +52,12 @@ public class SimpleOrder extends OrderComponent {
         temp.put(customer.getUsername(), this.products);
         return temp;
     }
-
+    @Override
+    public Map<String, Float> calcTotalCost() {
+        float totalCost = 0;
+        for (ProductItem product : products) {
+            totalCost += product.getPrice();
+        }
+        return Map.of(customer.getUsername(), totalCost);
+    }
 }

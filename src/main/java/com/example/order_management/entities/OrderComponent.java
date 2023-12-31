@@ -19,8 +19,8 @@ public abstract class OrderComponent {
     }
 
     abstract public OrderComponent printOrder();
-
     abstract public float calcShipping();
     abstract public List<Customer> getAllCustomers();
     abstract public Map<String, ArrayList<ProductItem>> getAllProductsForOutput();
+    abstract public Map<String, Float> calcTotalCost();
 }
