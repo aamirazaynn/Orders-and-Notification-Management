@@ -26,6 +26,29 @@ public class NotificationFactory {
             notification.setTemplate(Template);
             notification.setSubject("تأكيد الطلب");
             notification.setLanguage("ar");
+        } else if(language.equals("en")&&subject.equals("cancel placement")) {
+            String Template = "Dear {x} , your order with id ({y}) placement has been canceled. thanks for using our store :) ";
+            notification.setTemplate(Template);
+            notification.setSubject("Cancel Placement");
+            notification.setLanguage("en");
+        }
+        else if(language.equals("ar")&&subject.equals("cancel placement")) {
+            String Template = "عزيزى {x} ، لقد تم الغاء طلبك رقم ({y}) . شكرا لتسوقك معنا:) ";
+            notification.setTemplate(Template);
+            notification.setSubject("الغاء الطلب");
+            notification.setLanguage("ar");
+        }
+        else if(language.equals("en")&&subject.equals("cancel shipping")) {
+            String Template = "Dear {x} , your order with id ({y}) shipping has been canceled. thanks for using our store :) ";
+            notification.setTemplate(Template);
+            notification.setSubject("Cancel Shipping");
+            notification.setLanguage("en");
+        }
+        else if(language.equals("ar")&&subject.equals("cancel shipping")) {
+            String Template = "عزيزى {x} ، لقد تم الغاء شحن طلبك رقم ({y}) . شكرا لتسوقك معنا:) ";
+            notification.setTemplate(Template);
+            notification.setSubject("الغاء شحن الطلب");
+            notification.setLanguage("ar");
         }
         return notification;
     }
