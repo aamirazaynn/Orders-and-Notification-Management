@@ -1,11 +1,7 @@
 package com.example.order_management.controllers;
 
 import com.example.order_management.entities.*;
-import com.example.order_management.services.AuthenticationService;
-import com.example.order_management.services.CustomerService;
-import com.example.order_management.services.OrderService;
-import com.example.order_management.services.ProductService;
-import org.springframework.core.annotation.Order;
+import com.example.order_management.services.*;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
@@ -14,16 +10,26 @@ import java.util.*;
 public class ShippingController {
     private final OrderService orderService;
     private final CustomerService customerService;
+    private final NotificationService notificationService;
+    private final AuthenticationService authenticationService;
 
-
-    public ShippingController(OrderService orderService, CustomerService customerService) {
+    public ShippingController(OrderService orderService, CustomerService customerService, NotificationService notificationService, AuthenticationService authenticationService) {
         this.orderService = orderService;
         this.customerService = customerService;
+        this.notificationService = notificationService;
+
+        this.authenticationService = authenticationService;
     }
 
     @PostMapping("")
     public Response shipOrder(@RequestBody String orderId) {
         Response response = new Response();
+        // Check if user is logged in
+        if (!authenticationService.isLoggedIn()) {
+            response.setStatus(false);
+            response.setMessage("User not logged in, please login first");
+            return response;
+        }
         OrderComponent order = orderService.getOrder(orderId);
         List<Float> shippingFeesList = new ArrayList<>();
         if(order == null){
@@ -54,6 +60,16 @@ public class ShippingController {
                 customer.setBalance(customer.getBalance() - shippingFeesList.get(i));
                 customerService.updateCustomerBalance(customer);
             }
+
+//            String username = order.getAllCustomers().get(0).getUsername();
+//            String language = customerService.getCustomerByUsername(username).getLanguage();
+//            String channel = customerService.getCustomerByUsername(username).getChannel();
+//            notificationService.addNotification(username,orderId,language,"shipping", channel);
+
+            String username = authenticationService.getLoggedInCustomer().getUsername();
+            String language = authenticationService.getLoggedInCustomer().getLanguage();
+            String channel = authenticationService.getLoggedInCustomer().getChannel();
+            notificationService.addNotification(username,orderId,language,"shipping", channel);
             response.setStatus(true);
             response.setMessage("Order shipped successfully");
             orderService.shipOrder(orderId);

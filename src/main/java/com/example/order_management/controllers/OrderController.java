@@ -13,13 +13,15 @@ public class OrderController {
     private final ProductService productService;
     private final CategoryService categoryService;
     private final AuthenticationService authenticationService;
+    private final NotificationService notificationService;
 
-    public OrderController(OrderService orderService, CustomerService customerService, ProductService productService , AuthenticationService authenticationService, CategoryService categoryService) {
+    public OrderController(OrderService orderService, CustomerService customerService, ProductService productService , AuthenticationService authenticationService, CategoryService categoryService, NotificationService notificationService) {
         this.orderService = orderService;
         this.customerService = customerService;
         this.productService = productService;
         this.authenticationService = authenticationService;
         this.categoryService = categoryService;
+        this.notificationService = notificationService;
     }
 //    List<String> productList
     @PostMapping("/simpleOrder")
@@ -94,6 +96,8 @@ public class OrderController {
             return response;
         }
 
+        notificationService.addNotification(username, order.getId(), customer.getLanguage(), "placement", customer.getChannel());
+        // Return response
         response.setStatus(true);
         response.setMessage("Order placed successfully");
         return response;
@@ -198,6 +202,7 @@ public class OrderController {
             return response;
         }
 
+        notificationService.addNotification(authenticationService.getLoggedInCustomer().getUsername(), compoundOrder.getId(), authenticationService.getLoggedInCustomer().getLanguage(), "placement", authenticationService.getLoggedInCustomer().getChannel());
         response.setStatus(true);
         response.setMessage("Order placed successfully");
         return response;
@@ -218,10 +223,18 @@ public class OrderController {
     @GetMapping("/getOrderById")
     public OrderPrinter getOrderById(@RequestBody String id){
         OrderComponent order = orderService.getOrder(id);
+        if (order == null) {
+            return null;
+        }
         OrderPrinter temp = new OrderPrinter();
         temp.setOrderId(order.getId());
         temp.setShipped(order.isShipped());
         temp.setOrderDetails(order.getAllProductsForOutput());
         return temp;
+    }
+
+    @GetMapping("/getAllNotifications")
+    public LinkedList<Notification> getAllNotifications(){
+        return notificationService.getAllNotifications();
     }
 }
