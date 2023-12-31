@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -85,10 +83,8 @@ public class cancelOrder {
         orderService.removeOrder(orderId);
 
         // add notification
-        String username = authenticationService.getLoggedInCustomer().getUsername();
-        String language = authenticationService.getLoggedInCustomer().getLanguage();
-        String channel = authenticationService.getLoggedInCustomer().getChannel();
-        notificationService.addNotification(username, orderId, language, "cancel placement", channel);
+        Customer tempCustomer = authenticationService.getLoggedInCustomer();
+        notificationService.addNotification(tempCustomer, orderId, "cancel placement");
 
         response.setMessage("Order cancelled successfully");
         response.setStatus(true);

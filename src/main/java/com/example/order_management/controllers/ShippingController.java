@@ -61,15 +61,10 @@ public class ShippingController {
                 customerService.updateCustomerBalance(customer);
             }
 
-//            String username = order.getAllCustomers().get(0).getUsername();
-//            String language = customerService.getCustomerByUsername(username).getLanguage();
-//            String channel = customerService.getCustomerByUsername(username).getChannel();
-//            notificationService.addNotification(username,orderId,language,"shipping", channel);
+            // add notification
+            Customer tempCustomer = authenticationService.getLoggedInCustomer();
+            notificationService.addNotification(tempCustomer, orderId, "shipping");
 
-            String username = authenticationService.getLoggedInCustomer().getUsername();
-            String language = authenticationService.getLoggedInCustomer().getLanguage();
-            String channel = authenticationService.getLoggedInCustomer().getChannel();
-            notificationService.addNotification(username,orderId,language,"shipping", channel);
             response.setStatus(true);
             response.setMessage("Order shipped successfully");
             orderService.shipOrder(orderId);

@@ -23,7 +23,6 @@ public class OrderController {
         this.categoryService = categoryService;
         this.notificationService = notificationService;
     }
-//    List<String> productList
     @PostMapping("/simpleOrder")
     public Response placeSimpleOrder(@RequestBody List<String> listStringSerialNumbers) {
         Response response = new Response();
@@ -96,13 +95,13 @@ public class OrderController {
             return response;
         }
 
-        notificationService.addNotification(username, order.getId(), customer.getLanguage(), "placement", customer.getChannel());
-        // Return response
+        // add notification to the notification queue
+        notificationService.addNotification(customer, order.getId(), "placement");
+
         response.setStatus(true);
         response.setMessage("Order placed successfully");
         return response;
     }
-
     @PostMapping("/compoundOrder")
     public Response placeCompoundOrder(@RequestBody List<CompoundOrderInput> compoundOrderInputs) {
         Response response = new Response();
@@ -194,6 +193,7 @@ public class OrderController {
             categoryService.addItemToCategory(takenProduct, takenProduct.getCategory());
         }
 
+        // add order
         compoundOrder.setId(orderService.getAllOrders().size() + 1 + "");
         boolean res = orderService.addOrder(compoundOrder);
         if (!res) {
@@ -202,7 +202,10 @@ public class OrderController {
             return response;
         }
 
-        notificationService.addNotification(authenticationService.getLoggedInCustomer().getUsername(), compoundOrder.getId(), authenticationService.getLoggedInCustomer().getLanguage(), "placement", authenticationService.getLoggedInCustomer().getChannel());
+        // add notification to the notification queue
+        Customer tempCustomer = authenticationService.getLoggedInCustomer();
+        notificationService.addNotification(tempCustomer, compoundOrder.getId(), "placement");
+
         response.setStatus(true);
         response.setMessage("Order placed successfully");
         return response;
@@ -219,7 +222,6 @@ public class OrderController {
         }
         return orderPrinters;
     }
-
     @GetMapping("/getOrderById")
     public OrderPrinter getOrderById(@RequestBody String id){
         OrderComponent order = orderService.getOrder(id);
@@ -231,10 +233,5 @@ public class OrderController {
         temp.setShipped(order.isShipped());
         temp.setOrderDetails(order.getAllProductsForOutput());
         return temp;
-    }
-
-    @GetMapping("/getAllNotifications")
-    public LinkedList<Notification> getAllNotifications(){
-        return notificationService.getAllNotifications();
     }
 }
