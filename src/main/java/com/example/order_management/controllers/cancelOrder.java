@@ -97,9 +97,16 @@ public class CancelOrder {
     public Response cancelShipping(@RequestBody String orderId) {
         Response response = new Response();
         OrderComponent order = orderService.getOrder(orderId);
+        // check if order exists
+        if(order == null){
+            response.setStatus(false);
+            response.setMessage("Order id not found");
+            return response;
+        }
         Customer loggedInCustomer = authenticationService.getLoggedInCustomer();
         List<Customer> orderCustomers = order.getAllCustomers();
         boolean isOrderCustomer = false;
+
 
         // check if user is logged in
         if(!authenticationService.isLoggedIn()){
@@ -121,12 +128,6 @@ public class CancelOrder {
             return response;
         }
 
-        // check if order exists
-        if(order == null){
-            response.setStatus(false);
-            response.setMessage("Order id not found");
-            return response;
-        }
 
         // check if order is shipped
         if(!order.isShipped()){

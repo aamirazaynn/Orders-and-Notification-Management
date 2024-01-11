@@ -28,7 +28,13 @@ public class ProductService {
     }
     public ArrayList<ProductItem> getAllProducts() {
         try {
-            return ProductRepo.getAllProducts();
+            ArrayList<ProductItem> products = new ArrayList<>();
+            for (ProductItem product : ProductRepo.getAllProducts()) {
+                if (product.getRemainingNumber()>0) {
+                    products.add(product);
+                }
+            }
+            return products;
         } catch (Exception e) {
             System.out.println("Exception in getAllProducts as" + e.getMessage());
         }
